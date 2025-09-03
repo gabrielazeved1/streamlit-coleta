@@ -12,6 +12,28 @@ o projeto oferece duas formas de armazenamento:
 o uso de streamlit permite desenvolver dashboards e formulários sem precisar de conhecimento avançado em frontend, tornando a coleta de dados muito mais rápida e acessível.
 
 ---
+# streamlit dashboard - coleta de dados
+
+![funcionamento do banco e dashboard](./foto.png)
+
+---
+
+## estrutura do projeto 
+
+```properties
+streamlit-dashboard/
+├── .venv/
+├── data/                       # csv gerado pelo coleta.py
+├── coleta.py
+├── coleta_postgres_sqlalchemy.py
+├── pyproject.toml
+├── README.md
+├── foto.png
+└── .env
+
+```
+
+--- 
 
 ## requisitos
 
@@ -68,6 +90,17 @@ opcional para desenvolvimento:
 * centraliza os dados, evitando problemas de múltiplos csvs  
 
 ---
+## configuração do banco de dados
+
+no arquivo `.env` coloque suas credenciais:
+
+```bash
+DB_HOST=localhost
+DB_DATABASE=projeto_coleta
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+```
+---
 
 ## rodando os scripts
 
@@ -89,18 +122,21 @@ poetry run streamlit run coleta_postgres_sqlalchemy.py
 poetry run ruff .
 ```
 
-## estrutura do projeto 
+---
+## como conferir os dados no banco de dados via terminal
 
-```properties
-streamlit-dashboard/
-├── .venv/
-├── data/                       # csv gerado pelo coleta.py
-├── coleta.py
-├── coleta_postgres_sqlalchemy.py
-├── pyproject.toml
-├── README.md
-└── .env
-```
+```bash
+# acessar o banco de dados
+psql -U seu_usuario -d projeto_coleta
+
+# listar as tabelas
+\dt
+
+# visualizar registros
+SELECT * FROM survey_data;
+
+# sair do psql
+\q
 
 --- 
 
