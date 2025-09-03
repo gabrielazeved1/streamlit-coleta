@@ -1,18 +1,18 @@
 [project]
 name = "streamlit-dashboard"
 version = "0.1.0"
-description = ""
+description = "dashboard para coleta de dados usando streamlit e salvando em csv ou postgres"
 authors = [
     {name = "Gabriel Azevedo", email = "g.azevedo0121@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12, <4.0"  # <-- ALTERAÇÃO APLICADA AQUI
+requires-python = ">=3.12,<4.0"
 dependencies = [
-    "streamlit (>=1.49.1,<2.0.0)",
-    "pandas (>=2.3.2,<3.0.0)",
-    "sqlalchemy (>=2.0.43,<3.0.0)",
-    "psycopg2-binary (>=2.9.10,<3.0.0)",
-    "python-dotenv (>=1.1.1,<2.0.0)"
+    "streamlit>=1.49.1,<2.0.0",
+    "pandas>=2.3.2,<3.0.0",
+    "sqlalchemy>=2.0.43,<3.0.0",
+    "psycopg2-binary>=2.9.10,<3.0.0",
+    "python-dotenv>=1.1.1,<2.0.0"
 ]
 
 [build-system]
@@ -21,19 +21,16 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.12.11"
-taskipy = "^1.14.1"  # <-- DEPENDÊNCIA ADICIONADA AQUI
+taskipy = "^1.14.1"
 
 [tool.ruff]
-# Configurações de linting
-line-length = 88   # Comprimento máximo de linha
-select = ["E", "F", "W"]   # Seleciona as categorias de erros e avisos
-ignore = ["E203", "W503"]   # Ignora regras específicas
-
-# Adicione paths específicos se necessário
+line-length = 88
+select = ["E", "F", "W", "B"]
+ignore = ["E203"]
 exclude = ["build", "dist"]
 
-# Para especificar o conjunto de regras do Black para formatação
-extend-select = ["B"]
-
-[tool.poetry]
-package-mode = false
+[tool.taskipy.tasks]
+run_csv = "streamlit run coleta.py"
+run_postgres = "streamlit run coleta_postgres_sqlalchemy.py"
+lint = "ruff check ."
+lint_fix = "ruff check . --fix"

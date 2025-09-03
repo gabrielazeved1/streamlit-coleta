@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import os
 from sqlalchemy import create_engine, Column, Integer, String, Text
 from sqlalchemy.exc import SQLAlchemyError
@@ -9,14 +8,13 @@ from dotenv import load_dotenv
 # carregar variaveis de ambiente
 load_dotenv()
 
-# construir a URL do banco de dados
 DB_HOST = os.getenv("DB_HOST")
 DB_DATABASE = os.getenv("DB_DATABASE")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_DATABASE}"
 
-# definindo a base e a tabela usando SQLAlchemy ORM
+# base e tabela
 Base = declarative_base()
 
 class SurveyData(Base):
@@ -39,14 +37,12 @@ def get_engine():
         st.error(f"Erro ao conectar ao banco de dados: {e}")
         return None
 
-# funcao para criar a tabela caso não exista
 def criar_tabela_se_nao_existir(engine):
     try:
         Base.metadata.create_all(engine)
     except SQLAlchemyError as e:
         st.error(f"Erro ao criar a tabela: {e}")
 
-# funcao para salvar dados no banco de dados
 def salvar_dados_banco(session, dados):
     try:
         novo_dado = SurveyData(
@@ -62,57 +58,64 @@ def salvar_dados_banco(session, dados):
         session.add(novo_dado)
         session.commit()
     except SQLAlchemyError as e:
-        st.error(f"Erro ao salvar os dados no banco de dados: {e}")
+        st.error(f"Erro ao salvar os dados no banco: {e}")
         session.rollback()
 
-# instancia do engine e criar a tabela se necessário
 engine = get_engine()
 if engine is not None:
     criar_tabela_se_nao_existir(engine)
 
-# configurar a sessão do SQLAlchemy
 Session = sessionmaker(bind=engine)
 
-# Oopcoes de estados, areas de atuacao, bibliotecas, horas codando e conforto com dados
-estados = ["Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará",
-           "Distrito Federal", "Espírito Santo", "Goiás", "Maranhão",
-           "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Pará",
-           "Paraíba", "Paraná", "Pernambuco", "Piauí", "Rio de Janeiro",
-           "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima",
-           "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"]
+estados = [
+    "Acre", "Alagoas", "Amapa", "Amazonas", "Bahia", "Ceara",
+    "Distrito Federal", "Espirito Santo", "Goias", "Maranhao",
+    "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Para",
+    "Paraiba", "Parana", "Pernambuco", "Piaui", "Rio de Janeiro",
+    "Rio Grande do Norte", "Rio Grande do Sul", "Rondonia", "Roraima",
+    "Santa Catarina", "Sao Paulo", "Sergipe", "Tocantins"
+]
 
 areas_atuacao = ["Analista de Dados", "Cientista de Dados", "Engenheiro de Dados"]
 
-bibliotecas = ["Pandas", "Pydantic", "scikit-learn", "Git", "Pandera", "streamlit",
-               "postgres", "databricks", "AWS", "Azure", "airflow", "dbt",
-               "Pyspark", "Polars", "Kafka", "Duckdb", "PowerBI", "Excel", "Tableau", "storm"]
+bibliotecas = [
+    "Pandas", "Pydantic", "scikit-learn", "Git", "Pandera", "streamlit",
+    "postgres", "databricks", "AWS", "Azure", "airflow", "dbt",
+    "Pyspark", "Polars", "Kafka", "Duckdb", "PowerBI", "Excel",
+    "Tableau", "storm"
+]
 
 horas_codando = ["Menos de 5", "5-10", "10-20", "Mais de 20"]
 
-conforto_dados = ["Desconfortável", "Neutro", "Confortável", "Muito Confortável"]
+conforto_dados = ["Desconfortavel", "Neutro", "Confortavel", "Muito Confortavel"]
 
-# criacao do formulario
+# formulario
 with st.form("dados_enquete"):
     estado = st.selectbox("Estado", estados)
-    area_atuacao = st.selectbox("Área de Atuação", areas_atuacao)
-    bibliotecas_selecionadas = st.multiselect("Bibliotecas e ferramentas mais utilizadas", bibliotecas)
-    horas_codando = st.selectbox("Horas Codando ao longo da semana", horas_codando)
-    conforto_dados = st.selectbox("Conforto ao programar e trabalhar com dados", conforto_dados)
-    experiencia_python = st.slider("Experiência de Python", 0, 10)
-    experiencia_sql = st.slider("Experiência de SQL", 0, 10)
-    experiencia_cloud = st.slider("Experiência em Cloud", 0, 10)
+    area_atuacao = st.selectbox("Area de Atuacao", areas_atuacao)
+    bibliotecas_selecionadas = st.multiselect(
+        "Bibliotecas e ferramentas mais utilizadas",
+        bibliotecas
+    )
+    horas_codando_select = st.selectbox(
+        "Horas Codando ao longo da semana", horas_codando
+    )
+    conforto_dados_select = st.selectbox(
+        "Conforto ao programar e trabalhar com dados", conforto_dados
+    )
+    experiencia_python = st.slider("Experiencia de Python", 0, 10)
+    experiencia_sql = st.slider("Experiencia de SQL", 0, 10)
+    experiencia_cloud = st.slider("Experiencia em Cloud", 0, 10)
 
-    # botao para submeter o formulário
     submit_button = st.form_submit_button("Enviar")
 
-# se o botao foi clicado, salvar os dados no banco de dados
 if submit_button:
     novo_dado = {
         "Estado": estado,
         "Bibliotecas e ferramentas": ", ".join(bibliotecas_selecionadas),
         "Área de Atuação": area_atuacao,
-        "Horas de Estudo": horas_codando,
-        "Conforto com Dados": conforto_dados,
+        "Horas de Estudo": horas_codando_select,
+        "Conforto com Dados": conforto_dados_select,
         "Experiência de Python": experiencia_python,
         "Experiência de SQL": experiencia_sql,
         "Experiência de Cloud": experiencia_cloud,
@@ -121,4 +124,4 @@ if submit_button:
     salvar_dados_banco(session, novo_dado)
     st.success("Dados enviados com sucesso!")
 
-st.write("Outside the form")
+st.write("outside the form")
