@@ -12,7 +12,6 @@ o projeto oferece duas formas de armazenamento:
 o uso de streamlit permite desenvolver dashboards e formulários sem precisar de conhecimento avançado em frontend, tornando a coleta de dados muito mais rápida e acessível.
 
 ---
-# streamlit dashboard - coleta de dados
 
 ![funcionamento do banco e dashboard](./foto.png)
 
