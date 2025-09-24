@@ -127,6 +127,7 @@ poetry run ruff .
 ```bash
 # acessar o banco de dados
 psql -U seu_usuario -d projeto_coleta
+```
 
 # listar as tabelas
 \dt
