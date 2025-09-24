@@ -132,9 +132,10 @@ psql -U seu_usuario -d projeto_coleta
 # listar as tabelas
 \dt
 ```
-
+```bash
 # visualizar registros
 SELECT * FROM survey_data;
+```
 
 # sair do psql
 \q
