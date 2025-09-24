@@ -136,9 +136,10 @@ psql -U seu_usuario -d projeto_coleta
 # visualizar registros
 SELECT * FROM survey_data;
 ```
-
+```bash
 # sair do psql
 \q
+```
 
 --- 
 
