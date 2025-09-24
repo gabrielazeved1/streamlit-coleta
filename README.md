@@ -128,9 +128,10 @@ poetry run ruff .
 # acessar o banco de dados
 psql -U seu_usuario -d projeto_coleta
 ```
-
+```bash
 # listar as tabelas
 \dt
+```
 
 # visualizar registros
 SELECT * FROM survey_data;
